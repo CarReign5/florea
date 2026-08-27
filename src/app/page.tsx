@@ -1,69 +1,212 @@
-import Image from "next/image";
+import { Button } from "@/components/Button";
+import { PlaceholderPhoto } from "@/components/PlaceholderPhoto";
+
+const steps = [
+  {
+    number: "1",
+    title: "Choose",
+    description: "Pick a bouquet from the collection, or start from scratch.",
+  },
+  {
+    number: "2",
+    title: "Personalize",
+    description: "Choose your flowers, colors, wrapping, and add a message.",
+  },
+  {
+    number: "3",
+    title: "Deliver",
+    description: "Tell us where it's going, and we'll take it from there.",
+  },
+];
+
+const occasions = [
+  "Birthdays",
+  "Anniversaries",
+  "Graduations",
+  "Just because",
+];
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <>
+      {/* Hero */}
+      <section className="mx-auto max-w-[1280px] px-6 pt-16 pb-20 md:px-10 md:pt-24 md:pb-28">
+        <div className="grid items-center gap-12 md:grid-cols-2 md:gap-16">
+          <div className="max-w-[560px]">
+            <p className="text-xs font-medium tracking-[0.14em] text-taupe uppercase">
+              Handmade in General Santos City
+            </p>
+            <h1 className="font-display mt-4 text-[42px] leading-[1.02] font-medium text-ink sm:text-[56px] md:text-[68px]">
+              Thoughtful flowers, made by hand.
+            </h1>
+            <p className="mt-6 text-lg leading-relaxed text-ink/75">
+              Fuzzy-wire and crochet bouquets, chosen and personalized right
+              here — no back-and-forth messages, just a gift that stays.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-4">
+              <Button href="/shop">Shop the collection</Button>
+              <Button href="/builder" variant="secondary">
+                Build your own
+              </Button>
+            </div>
+          </div>
+
+          <PlaceholderPhoto
+            aspect="portrait"
+            label="Hero bouquet photo — pending"
+          />
+        </div>
+      </section>
+
+      {/* Featured collection */}
+      <section className="bg-soft-beige/50 py-20 md:py-28">
+        <div className="mx-auto max-w-[1280px] px-6 md:px-10">
+          <div className="flex items-end justify-between gap-6">
+            <div>
+              <p className="text-xs font-medium tracking-[0.14em] text-taupe uppercase">
+                Bestsellers
+              </p>
+              <h2 className="font-display mt-3 text-3xl font-medium text-ink md:text-4xl">
+                A few favorites
+              </h2>
+            </div>
+            <Button href="/shop" variant="secondary">
+              View all
+            </Button>
+          </div>
+
+          <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {[1, 2, 3].map((item) => (
+              <div key={item} className="flex flex-col gap-4">
+                <PlaceholderPhoto aspect="portrait" label="Sample bouquet" />
+                <div>
+                  <p className="font-display text-xl font-medium text-ink">
+                    Bouquet name — placeholder
+                  </p>
+                  <p className="mt-1 text-sm text-ink/60">
+                    Handmade &middot; price to be confirmed
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Brand story */}
+      <section id="story" className="py-20 md:py-28">
+        <div className="mx-auto max-w-[720px] px-6 text-center md:px-10">
+          <p className="text-xs font-medium tracking-[0.14em] text-taupe uppercase">
+            Made by hand, given with meaning
+          </p>
+          <h2 className="font-display mt-4 text-3xl font-medium text-ink md:text-4xl">
+            Every stem is shaped by hand, one at a time.
+          </h2>
+          <p className="mt-6 text-lg leading-relaxed text-ink/75">
+            Floréa&rsquo;s bouquets are crafted from fuzzy wire and crochet
+            thread — not fresh flowers — so a gift given today can still be
+            held years from now. Made in General Santos City, wrapped with
+            care, and built to last well beyond the moment it&rsquo;s given.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      {/* Ordering steps */}
+      <section className="bg-soft-beige/50 py-20 md:py-28">
+        <div className="mx-auto max-w-[1280px] px-6 md:px-10">
+          <div className="text-center">
+            <p className="text-xs font-medium tracking-[0.14em] text-taupe uppercase">
+              How it works
+            </p>
+            <h2 className="font-display mt-3 text-3xl font-medium text-ink md:text-4xl">
+              Three simple steps
+            </h2>
+          </div>
+
+          <div className="mt-12 grid gap-10 sm:grid-cols-3">
+            {steps.map((step) => (
+              <div key={step.number} className="text-center">
+                <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full border border-ink/20 text-sm font-medium text-ink">
+                  {step.number}
+                </div>
+                <p className="font-display mt-4 text-xl font-medium text-ink">
+                  {step.title}
+                </p>
+                <p className="mt-2 text-sm leading-relaxed text-ink/70">
+                  {step.description}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
-      </main>
-    </div>
+      </section>
+
+      {/* Occasions */}
+      <section className="py-20 md:py-28">
+        <div className="mx-auto max-w-[1280px] px-6 md:px-10">
+          <div className="text-center">
+            <p className="text-xs font-medium tracking-[0.14em] text-taupe uppercase">
+              Shop by occasion
+            </p>
+            <h2 className="font-display mt-3 text-3xl font-medium text-ink md:text-4xl">
+              A gift for every moment
+            </h2>
+          </div>
+
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            {occasions.map((occasion) => (
+              <Button key={occasion} href="/shop" variant="secondary">
+                {occasion}
+              </Button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Personalization feature */}
+      <section className="bg-soft-beige/50 py-20 md:py-28">
+        <div className="mx-auto grid max-w-[1280px] items-center gap-12 px-6 md:grid-cols-2 md:gap-16 md:px-10">
+          <PlaceholderPhoto
+            aspect="wide"
+            label="Gift note detail photo — pending"
+            className="md:order-2"
+          />
+          <div className="md:order-1">
+            <p className="text-xs font-medium tracking-[0.14em] text-taupe uppercase">
+              Personalize
+            </p>
+            <h2 className="font-display mt-4 text-3xl font-medium text-ink md:text-4xl">
+              Add a message they can keep.
+            </h2>
+            <p className="mt-6 text-lg leading-relaxed text-ink/75">
+              Every order can include a handwritten-style note, so your
+              bouquet arrives with something to read as well as something
+              to hold.
+            </p>
+            <div className="mt-6 rounded-[6px] border border-ink/15 bg-ivory p-6">
+              <p className="font-mono text-sm leading-relaxed text-ink/70">
+                &ldquo;To someone who makes life more beautiful just by
+                being in it.&rdquo;
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section className="py-20 md:py-28">
+        <div className="mx-auto max-w-[640px] px-6 text-center md:px-10">
+          <h2 className="font-display text-3xl font-medium text-ink md:text-4xl">
+            Choose a gift that stays.
+          </h2>
+          <div className="mt-8 flex flex-wrap justify-center gap-4">
+            <Button href="/shop">Shop the collection</Button>
+            <Button href="/builder" variant="secondary">
+              Build your own
+            </Button>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
