@@ -30,31 +30,33 @@ export default function Home() {
   return (
     <>
       {/* Hero */}
-      <section className="mx-auto max-w-[1280px] px-6 pt-16 pb-20 md:px-10 md:pt-24 md:pb-28">
-        <div className="grid items-center gap-12 md:grid-cols-2 md:gap-16">
-          <div className="max-w-[560px]">
-            <p className="text-xs font-medium tracking-[0.14em] text-taupe uppercase">
-              Handmade in General Santos City
-            </p>
-            <h1 className="font-display mt-4 text-[42px] leading-[1.02] font-medium text-ink sm:text-[56px] md:text-[68px]">
-              Thoughtful flowers, made by hand.
-            </h1>
-            <p className="mt-6 text-lg leading-relaxed text-ink/75">
-              Fuzzy-wire and crochet bouquets, chosen and personalized right
-              here — no back-and-forth messages, just a gift that stays.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-4">
-              <Button href="/shop">Shop the collection</Button>
-              <Button href="/builder" variant="secondary">
-                Build your own
-              </Button>
+      <section className="flex items-center py-16 md:min-h-[calc(100dvh-5rem)] md:py-20">
+        <div className="mx-auto w-full max-w-[1280px] px-6 md:px-10">
+          <div className="grid items-center gap-12 md:grid-cols-2 md:gap-16">
+            <div className="mx-auto max-w-[560px] text-center md:mx-0 md:text-left">
+              <p className="text-xs font-medium tracking-[0.14em] text-taupe uppercase">
+                Handmade in General Santos City
+              </p>
+              <h1 className="font-display mt-4 text-[42px] leading-[1.02] font-medium text-ink sm:text-[56px] md:text-[68px]">
+                Thoughtful flowers, made by hand.
+              </h1>
+              <p className="mt-6 text-lg leading-relaxed text-ink/75">
+                Fuzzy-wire and crochet bouquets, chosen and personalized right
+                here — no back-and-forth messages, just a gift that stays.
+              </p>
+              <div className="mt-8 flex flex-wrap justify-center gap-4 md:justify-start">
+                <Button href="/shop">Shop the collection</Button>
+                <Button href="/builder" variant="secondary">
+                  Build your own
+                </Button>
+              </div>
             </div>
-          </div>
 
-          <PlaceholderPhoto
-            aspect="portrait"
-            label="Hero bouquet photo — pending"
-          />
+            <PlaceholderPhoto
+              aspect="portrait"
+              label="Hero bouquet photo — pending"
+            />
+          </div>
         </div>
       </section>
 
