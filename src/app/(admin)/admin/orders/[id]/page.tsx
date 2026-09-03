@@ -4,6 +4,8 @@ import { OrderStatusControl } from "@/components/admin/OrderStatusControl";
 import { getOrderById } from "@/lib/data/orders-store";
 import { formatPrice } from "@/lib/format";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminOrderDetailPage(
   props: PageProps<"/admin/orders/[id]">,
 ) {

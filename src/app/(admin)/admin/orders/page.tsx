@@ -3,6 +3,8 @@ import { StatusPill } from "@/components/admin/StatusPill";
 import { listOrders } from "@/lib/data/orders-store";
 import { formatPrice } from "@/lib/format";
 
+export const dynamic = "force-dynamic";
+
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("en-PH", {
     month: "short",
