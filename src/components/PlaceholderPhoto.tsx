@@ -17,9 +17,9 @@ export function PlaceholderPhoto({
 }) {
   return (
     <div
-      className={`relative flex ${aspectClasses[aspect]} items-center justify-center overflow-hidden rounded-[10px] border border-ink/10 bg-gradient-to-br from-soft-beige to-champagne/60 ${className}`}
+      className={`relative ${aspectClasses[aspect]} overflow-hidden rounded-[10px] border border-ink/10 bg-gradient-to-br from-soft-beige to-champagne/60 ${className}`}
     >
-      <div className="flex flex-col items-center gap-3 px-6 text-center">
+      <div className="flex flex-col items-center gap-3 px-6 text-center ">
         <BotanicalIcon className="h-12 w-8 text-taupe/70" />
         <p className="text-xs font-medium tracking-[0.08em] text-taupe/80 uppercase">
           {label}

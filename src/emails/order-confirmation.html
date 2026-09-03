@@ -1,0 +1,134 @@
+<!--
+  Order confirmation email — sent to the customer after checkout.
+  Placeholders use {{double curly braces}} to be filled in when this
+  is wired up to Resend in Phase 3. Table-based layout + inline styles
+  for email client compatibility (no external CSS/webfonts).
+  {{logoUrl}} should point to the deployed site's /logo.png (an
+  absolute https:// URL — email clients can't load local/relative
+  file paths).
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Your Floréa order is confirmed</title>
+  </head>
+  <body style="margin:0; padding:0; background-color:#FAF7F2; font-family:Arial, Helvetica, sans-serif;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#FAF7F2;">
+      <tr>
+        <td align="center" style="padding:40px 16px;">
+          <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px; width:100%; background-color:#FFFFFF; border:1px solid rgba(41,37,34,0.1); border-radius:10px; overflow:hidden;">
+
+            <!-- Header -->
+            <tr>
+              <td align="center" style="padding:32px 32px 16px; background-color:#FAF7F2;">
+                <img
+                  src="{{logoUrl}}"
+                  width="220"
+                  alt="Floréa"
+                  style="display:block; width:220px; height:auto; margin:0 auto; border:0; font-family:Georgia,'Times New Roman',serif; font-size:16px; color:#9B846E;"
+                />
+              </td>
+            </tr>
+
+            <!-- Body -->
+            <tr>
+              <td style="padding:36px 32px 8px;">
+                <p style="margin:0 0 4px; font-family:Georgia,'Times New Roman',serif; font-size:26px; color:#292522;">Thank you, {{customerFirstName}}.</p>
+                <p style="margin:0; font-size:15px; line-height:1.6; color:rgba(41,37,34,0.75);">
+                  Your order is confirmed — we're already looking forward to making it by hand.
+                </p>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="padding:20px 32px 0;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid rgba(41,37,34,0.1); border-bottom:1px solid rgba(41,37,34,0.1);">
+                  <tr>
+                    <td style="padding:16px 0; font-size:13px; color:rgba(41,37,34,0.5);">Order number</td>
+                    <td style="padding:16px 0; font-size:13px; color:#292522; text-align:right; font-weight:bold;">{{orderNumber}}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:0 0 16px; font-size:13px; color:rgba(41,37,34,0.5);">Order date</td>
+                    <td style="padding:0 0 16px; font-size:13px; color:#292522; text-align:right;">{{orderDate}}</td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- Items -->
+            <tr>
+              <td style="padding:24px 32px 0;">
+                <p style="margin:0 0 12px; font-size:11px; letter-spacing:1.5px; color:#9B846E; text-transform:uppercase;">Your order</p>
+                <!-- {{#each items}} -->
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:16px;">
+                  <tr>
+                    <td style="font-size:15px; color:#292522; font-weight:bold;">{{quantity}} &times; {{itemName}}</td>
+                    <td style="font-size:15px; color:#292522; text-align:right; font-weight:bold;">{{lineTotal}}</td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" style="font-size:13px; color:rgba(41,37,34,0.6); padding-top:2px;">{{itemOptions}}</td>
+                  </tr>
+                </table>
+                <!-- {{/each}} -->
+              </td>
+            </tr>
+
+            <tr>
+              <td style="padding:8px 32px 24px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid rgba(41,37,34,0.1); padding-top:12px;">
+                  <tr>
+                    <td style="padding-top:16px; font-size:15px; color:rgba(41,37,34,0.7);">Subtotal</td>
+                    <td style="padding-top:16px; font-size:15px; color:#292522; text-align:right;">{{subtotal}}</td>
+                  </tr>
+                  <tr>
+                    <td style="font-size:15px; color:rgba(41,37,34,0.7); padding-top:4px;">Delivery</td>
+                    <td style="font-size:15px; color:#292522; text-align:right; padding-top:4px;">{{deliveryFee}}</td>
+                  </tr>
+                  <tr>
+                    <td style="font-family:Georgia,'Times New Roman',serif; font-size:20px; color:#292522; padding-top:12px;">Total</td>
+                    <td style="font-family:Georgia,'Times New Roman',serif; font-size:20px; color:#292522; text-align:right; padding-top:12px;">{{orderTotal}}</td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- Delivery details -->
+            <tr>
+              <td style="padding:0 32px 24px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#E9DED0; border-radius:6px;">
+                  <tr>
+                    <td style="padding:18px 20px;">
+                      <p style="margin:0 0 6px; font-size:11px; letter-spacing:1.5px; color:#9B846E; text-transform:uppercase;">{{fulfillmentMethod}}</p>
+                      <p style="margin:0; font-size:14px; line-height:1.6; color:#292522;">{{fulfillmentDetails}}</p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- What happens next -->
+            <tr>
+              <td style="padding:0 32px 32px;">
+                <p style="margin:0 0 8px; font-size:11px; letter-spacing:1.5px; color:#9B846E; text-transform:uppercase;">What happens next</p>
+                <p style="margin:0; font-size:14px; line-height:1.7; color:rgba(41,37,34,0.75);">
+                  Your bouquet is being prepared with care. We'll send another note when it's ready for {{fulfillmentVerb}}. If anything about your order needs to change, just reply to this email.
+                </p>
+              </td>
+            </tr>
+
+            <!-- Footer -->
+            <tr>
+              <td align="center" style="padding:24px 32px; background-color:#292522;">
+                <p style="margin:0 0 4px; font-family:Georgia,'Times New Roman',serif; font-size:15px; color:#D8C4A8;">Made by hand, given with meaning.</p>
+                <p style="margin:0; font-size:12px; color:rgba(250,247,242,0.5);">Floréa &middot; General Santos City, Philippines</p>
+              </td>
+            </tr>
+
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

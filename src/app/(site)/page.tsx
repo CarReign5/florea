@@ -1,16 +1,28 @@
+import Image from "next/image";
 import { Button } from "@/components/Button";
 import { PlaceholderPhoto } from "@/components/PlaceholderPhoto";
+import { ProductCard } from "@/components/ProductCard";
+import { bouquets } from "@/lib/data/bouquets";
+
+const bestsellerSlugs = [
+  "pink-tulip-bouquet",
+  "dusty-rose-keepsake",
+  "crochet-daisy-bunch",
+];
+const bestsellers = bestsellerSlugs
+  .map((slug) => bouquets.find((bouquet) => bouquet.slug === slug))
+  .filter((bouquet): bouquet is (typeof bouquets)[number] => Boolean(bouquet));
 
 const steps = [
   {
     number: "1",
     title: "Choose",
-    description: "Pick a bouquet from the collection, or start from scratch.",
+    description: "Pick a bouquet from the collection.",
   },
   {
     number: "2",
     title: "Personalize",
-    description: "Choose your flowers, colors, wrapping, and add a message.",
+    description: "Add a handwritten-style message for the recipient.",
   },
   {
     number: "3",
@@ -30,7 +42,7 @@ export default function Home() {
   return (
     <>
       {/* Hero */}
-      <section className="flex items-center py-16 md:min-h-[calc(100dvh-5rem)] md:py-20">
+      <section className="flex items-center py-16 md:min-h-[calc(80dvh-5rem)] md:py-20">
         <div className="mx-auto w-full max-w-[1280px] px-6 md:px-10">
           <div className="grid items-center gap-12 md:grid-cols-2 md:gap-16">
             <div className="mx-auto max-w-[560px] text-center md:mx-0 md:text-left">
@@ -46,16 +58,19 @@ export default function Home() {
               </p>
               <div className="mt-8 flex flex-wrap justify-center gap-4 md:justify-start">
                 <Button href="/shop">Shop the collection</Button>
-                <Button href="/builder" variant="secondary">
-                  Build your own
-                </Button>
               </div>
             </div>
 
-            <PlaceholderPhoto
-              aspect="portrait"
-              label="Hero bouquet photo — pending"
-            />
+            <div className="mx-auto flex w-full max-w-[360px] items-center justify-center overflow-hidden rounded-[10px] border border-ink/10 md:h-[min(52vh,440px)] md:w-auto">
+              <Image
+                src="/hero-image.png"
+                alt="Handmade fuzzy-wire tulip bouquet in soft pink, wrapped in kraft newspaper and ivory paper with a white ribbon, on a sunlit tabletop"
+                width={3258}
+                height={3141}
+                className="h-auto w-full md:h-full md:w-auto md:max-w-none"
+                priority
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -78,18 +93,8 @@ export default function Home() {
           </div>
 
           <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {[1, 2, 3].map((item) => (
-              <div key={item} className="flex flex-col gap-4">
-                <PlaceholderPhoto aspect="portrait" label="Sample bouquet" />
-                <div>
-                  <p className="font-display text-xl font-medium text-ink">
-                    Bouquet name — placeholder
-                  </p>
-                  <p className="mt-1 text-sm text-ink/60">
-                    Handmade &middot; price to be confirmed
-                  </p>
-                </div>
-              </div>
+            {bestsellers.map((bouquet) => (
+              <ProductCard key={bouquet.slug} bouquet={bouquet} />
             ))}
           </div>
         </div>
@@ -203,9 +208,6 @@ export default function Home() {
           </h2>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Button href="/shop">Shop the collection</Button>
-            <Button href="/builder" variant="secondary">
-              Build your own
-            </Button>
           </div>
         </div>
       </section>

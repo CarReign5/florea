@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Cormorant_Garamond, Roboto } from "next/font/google";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import "./globals.css";
+import { CartProvider } from "@/lib/cart-context";
+import "../globals.css";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -30,9 +31,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${cormorant.variable} ${roboto.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-ivory text-ink">
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <CartProvider>
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </CartProvider>
       </body>
     </html>
   );

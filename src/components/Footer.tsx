@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Logo } from "./Logo";
 
 export function Footer() {
   return (
@@ -6,7 +7,7 @@ export function Footer() {
       <div className="mx-auto max-w-[1280px] px-6 py-16 md:px-10 md:py-20">
         <div className="grid gap-12 md:grid-cols-3">
           <div>
-            <p className="font-display text-2xl tracking-wide">FLORÉA</p>
+            <Logo variant="full" align="start" />
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-ivory/70">
               Handmade fuzzy-wire and crochet flowers, made slowly and given
               meaningfully. Based in General Santos City, Philippines.
@@ -21,14 +22,6 @@ export function Footer() {
               <li>
                 <Link href="/shop" className="text-ivory/80 hover:text-ivory">
                   Shop collection
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/builder"
-                  className="text-ivory/80 hover:text-ivory"
-                >
-                  Build your own
                 </Link>
               </li>
               <li>
