@@ -1,65 +1,89 @@
 import "server-only";
-import { randomUUID } from "node:crypto";
-import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
-import path from "node:path";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type { Order, OrderItem } from "@/lib/data/orders";
-import { SEED_ORDERS } from "@/lib/data/orders-seed";
 
-/**
- * Local JSON-file order store — a stand-in for Supabase until that account
- * exists. Process-local file storage works for `next dev` / a single
- * `next start` process, but does NOT work on serverless/multi-instance hosts
- * (e.g. Vercel, where the filesystem is read-only outside /tmp and instances
- * don't share state). Swap this module out for a real Supabase-backed DAL
- * once that account is set up — callers only depend on this file's exports,
- * not its storage mechanism.
- */
+let client: SupabaseClient | null = null;
 
-const DATA_DIR = path.join(process.cwd(), "data");
-const DATA_FILE = path.join(DATA_DIR, "orders.json");
+function getClient(): SupabaseClient {
+  if (client) return client;
 
-// Serializes every read-modify-write cycle so concurrent submits can't both
-// read the same pre-append array and clobber each other.
-let writeQueue: Promise<unknown> = Promise.resolve();
-function enqueue<T>(task: () => Promise<T>): Promise<T> {
-  const run = writeQueue.then(task, task);
-  writeQueue = run.then(
-    () => undefined,
-    () => undefined,
-  );
-  return run;
-}
-
-async function readOrdersFromDisk(): Promise<Order[]> {
-  try {
-    const raw = await readFile(DATA_FILE, "utf-8");
-    return JSON.parse(raw) as Order[];
-  } catch (err) {
-    if ((err as NodeJS.ErrnoException).code === "ENOENT") {
-      await writeOrdersToDisk(SEED_ORDERS);
-      return SEED_ORDERS;
-    }
-    throw err;
+  const url = process.env.SUPABASE_URL;
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !serviceRoleKey) {
+    throw new Error(
+      "Orders are unavailable — SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY are not configured.",
+    );
   }
+
+  client = createClient(url, serviceRoleKey, {
+    auth: { persistSession: false },
+  });
+  return client;
 }
 
-async function writeOrdersToDisk(orders: Order[]): Promise<void> {
-  await mkdir(DATA_DIR, { recursive: true });
-  const tmpFile = `${DATA_FILE}.${randomUUID()}.tmp`;
-  await writeFile(tmpFile, JSON.stringify(orders, null, 2), "utf-8");
-  await rename(tmpFile, DATA_FILE);
+type OrderRow = {
+  id: string;
+  order_number: string;
+  placed_at: string;
+  customer_name: string;
+  customer_phone: string;
+  customer_email: string;
+  fulfillment_method: Order["fulfillmentMethod"];
+  fulfillment_details: string;
+  fulfillment_date_time: string;
+  payment_method: Order["paymentMethod"];
+  status: Order["status"];
+  gift_message: string;
+  items: OrderItem[];
+  total: number;
+};
+
+function mapRowToOrder(row: OrderRow): Order {
+  return {
+    id: row.id,
+    orderNumber: row.order_number,
+    placedAt: row.placed_at,
+    customerName: row.customer_name,
+    customerPhone: row.customer_phone,
+    customerEmail: row.customer_email,
+    fulfillmentMethod: row.fulfillment_method,
+    fulfillmentDetails: row.fulfillment_details,
+    fulfillmentDateTime: row.fulfillment_date_time,
+    paymentMethod: row.payment_method,
+    status: row.status,
+    giftMessage: row.gift_message,
+    items: row.items,
+    total: row.total,
+  };
 }
 
 export async function listOrders(): Promise<Order[]> {
-  const orders = await readOrdersFromDisk();
-  return [...orders].sort(
-    (a, b) => new Date(b.placedAt).getTime() - new Date(a.placedAt).getTime(),
-  );
+  const { data, error } = await getClient()
+    .from("orders")
+    .select("*")
+    .order("placed_at", { ascending: false });
+
+  if (error) {
+    console.error("[orders-store] Failed to list orders:", error);
+    throw new Error("Failed to load orders.");
+  }
+
+  return (data as OrderRow[]).map(mapRowToOrder);
 }
 
 export async function getOrderById(id: string): Promise<Order | undefined> {
-  const orders = await readOrdersFromDisk();
-  return orders.find((order) => order.id === id);
+  const { data, error } = await getClient()
+    .from("orders")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (error) {
+    console.error("[orders-store] Failed to load order:", error);
+    throw new Error("Failed to load order.");
+  }
+
+  return data ? mapRowToOrder(data as OrderRow) : undefined;
 }
 
 export type CreateOrderInput = {
@@ -140,53 +164,49 @@ function validateCreateOrderInput(input: CreateOrderInput): ValidationResult {
   };
 }
 
-function nextOrderNumber(orders: Order[]): string {
-  const max = orders.reduce((highest, order) => {
-    const match = /^#FL-(\d+)$/.exec(order.orderNumber);
-    if (!match) return highest;
-    return Math.max(highest, Number(match[1]));
-  }, 999);
-  return `#FL-${max + 1}`;
-}
-
 export type CreateOrderResult =
   | { ok: true; order: Order }
   | { ok: false; errors: Record<string, string> };
 
-export function createOrder(
+export async function createOrder(
   input: CreateOrderInput,
 ): Promise<CreateOrderResult> {
-  return enqueue(async () => {
-    const validated = validateCreateOrderInput(input);
-    if (!validated.ok) {
-      return { ok: false, errors: validated.errors };
-    }
-    const { data } = validated;
+  const validated = validateCreateOrderInput(input);
+  if (!validated.ok) {
+    return { ok: false, errors: validated.errors };
+  }
+  const { data: order } = validated;
 
-    const orders = await readOrdersFromDisk();
-    const total = data.items.reduce(
-      (sum, item) => sum + item.unitPrice * item.quantity,
-      0,
-    );
+  const total = order.items.reduce(
+    (sum, item) => sum + item.unitPrice * item.quantity,
+    0,
+  );
 
-    const order: Order = {
-      id: randomUUID(),
-      orderNumber: nextOrderNumber(orders),
-      placedAt: new Date().toISOString(),
-      customerName: data.customerName,
-      customerPhone: data.customerPhone,
-      customerEmail: data.customerEmail,
-      fulfillmentMethod: data.fulfillmentMethod,
-      fulfillmentDetails: data.fulfillmentDetails,
-      fulfillmentDateTime: data.fulfillmentDateTime,
-      paymentMethod: "Pay on pickup/delivery",
+  const { data, error } = await getClient()
+    .from("orders")
+    .insert({
+      customer_name: order.customerName,
+      customer_phone: order.customerPhone,
+      customer_email: order.customerEmail,
+      fulfillment_method: order.fulfillmentMethod,
+      fulfillment_details: order.fulfillmentDetails,
+      fulfillment_date_time: order.fulfillmentDateTime,
+      payment_method: "Pay on pickup/delivery",
       status: "pending",
-      giftMessage: data.giftMessage,
-      items: data.items,
+      gift_message: order.giftMessage,
+      items: order.items,
       total,
-    };
+    })
+    .select()
+    .single();
 
-    await writeOrdersToDisk([...orders, order]);
-    return { ok: true, order };
-  });
+  if (error) {
+    console.error("[orders-store] Failed to create order:", error);
+    return {
+      ok: false,
+      errors: { form: "Something went wrong saving your order. Please try again." },
+    };
+  }
+
+  return { ok: true, order: mapRowToOrder(data as OrderRow) };
 }

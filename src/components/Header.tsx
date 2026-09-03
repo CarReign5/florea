@@ -4,6 +4,7 @@ import { Logo } from "./Logo";
 import { MobileNav } from "./MobileNav";
 
 const navLinks = [
+  { href: "/", label: "Home" },
   { href: "/shop", label: "Shop collection" },
   { href: "/#story", label: "Our story" },
 ];

@@ -4,10 +4,12 @@ import { useActionState, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { useCart } from "@/lib/cart-context";
 import { formatPrice } from "@/lib/format";
-import { createOrderAction, initialCheckoutActionState } from "./actions";
+import { createOrderAction, type CheckoutActionState } from "./actions";
 
 const inputClass =
   "w-full rounded-[6px] border border-ink/15 bg-ivory p-3 text-sm text-ink placeholder:text-ink/40 focus:border-ink/40 focus:outline-none";
+
+const initialCheckoutActionState: CheckoutActionState = { status: "idle" };
 
 function Field({
   label,
@@ -100,6 +102,12 @@ export default function CheckoutPage() {
 
       <form action={formAction} className="mt-8 flex flex-col gap-6">
         <input type="hidden" name="items" value={JSON.stringify(items)} />
+
+        {state.errors?.form && (
+          <p className="rounded-[6px] border border-red-700/20 bg-red-50 px-4 py-3 text-sm text-red-700">
+            {state.errors.form}
+          </p>
+        )}
 
         <div className="grid gap-6 sm:grid-cols-2">
           <Field label="Full name" error={state.errors?.customerName}>
