@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { StatusPill } from "@/components/admin/StatusPill";
-import { orders } from "@/lib/data/orders";
+import { listOrders } from "@/lib/data/orders-store";
 import { formatPrice } from "@/lib/format";
 
 function formatDate(iso: string) {
@@ -12,7 +12,8 @@ function formatDate(iso: string) {
   });
 }
 
-export default function AdminOrdersPage() {
+export default async function AdminOrdersPage() {
+  const orders = await listOrders();
   const pendingCount = orders.filter(
     (o) => o.status === "pending" || o.status === "paid",
   ).length;

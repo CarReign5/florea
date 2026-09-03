@@ -1,11 +1,43 @@
 "use client";
 
+import { useActionState, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { useCart } from "@/lib/cart-context";
 import { formatPrice } from "@/lib/format";
+import { createOrderAction, initialCheckoutActionState } from "./actions";
+
+const inputClass =
+  "w-full rounded-[6px] border border-ink/15 bg-ivory p-3 text-sm text-ink placeholder:text-ink/40 focus:border-ink/40 focus:outline-none";
+
+function Field({
+  label,
+  error,
+  children,
+}: {
+  label: string;
+  error?: string;
+  children: ReactNode;
+}) {
+  return (
+    <label className="block">
+      <span className="text-xs font-medium tracking-[0.1em] text-taupe uppercase">
+        {label}
+      </span>
+      <div className="mt-2">{children}</div>
+      {error && <p className="mt-1 text-sm text-red-700">{error}</p>}
+    </label>
+  );
+}
 
 export default function CheckoutPage() {
   const { items, subtotal } = useCart();
+  const [fulfillmentMethod, setFulfillmentMethod] = useState<
+    "Delivery" | "Pickup"
+  >("Delivery");
+  const [state, formAction, isPending] = useActionState(
+    createOrderAction,
+    initialCheckoutActionState,
+  );
 
   if (items.length === 0) {
     return (
@@ -37,12 +69,11 @@ export default function CheckoutPage() {
         Checkout
       </p>
       <h1 className="font-display mt-4 text-4xl font-medium text-ink md:text-5xl">
-        Online checkout is on its way.
+        Complete your order
       </h1>
       <p className="mt-4 text-lg leading-relaxed text-ink/70">
-        Online payment and delivery details aren&rsquo;t set up on the site
-        just yet. For now, here&rsquo;s a summary of your order — send it to
-        us on Facebook and we&rsquo;ll take it from there.
+        Fill in your details below — we&rsquo;ll confirm by email and get your
+        bouquet ready.
       </p>
 
       <div className="mt-8 rounded-[10px] border border-ink/10 bg-soft-beige/40 p-6">
@@ -67,14 +98,142 @@ export default function CheckoutPage() {
         </p>
       </div>
 
-      <div className="mt-8 flex flex-wrap gap-4">
-        <Link
-          href="/cart"
-          className="inline-flex h-12 items-center rounded-[6px] border border-ink/25 px-6 text-sm font-medium text-ink"
+      <form action={formAction} className="mt-8 flex flex-col gap-6">
+        <input type="hidden" name="items" value={JSON.stringify(items)} />
+
+        <div className="grid gap-6 sm:grid-cols-2">
+          <Field label="Full name" error={state.errors?.customerName}>
+            <input
+              type="text"
+              name="customerName"
+              defaultValue={state.values?.customerName}
+              required
+              className={inputClass}
+            />
+          </Field>
+          <Field label="Phone number" error={state.errors?.customerPhone}>
+            <input
+              type="tel"
+              name="customerPhone"
+              defaultValue={state.values?.customerPhone}
+              required
+              className={inputClass}
+            />
+          </Field>
+        </div>
+
+        <Field label="Email" error={state.errors?.customerEmail}>
+          <input
+            type="email"
+            name="customerEmail"
+            defaultValue={state.values?.customerEmail}
+            required
+            className={inputClass}
+          />
+        </Field>
+
+        <fieldset>
+          <legend className="text-xs font-medium tracking-[0.1em] text-taupe uppercase">
+            Fulfillment
+          </legend>
+          <div className="mt-3 flex flex-wrap gap-3">
+            {(["Delivery", "Pickup"] as const).map((method) => (
+              <label
+                key={method}
+                className={`flex h-12 cursor-pointer items-center rounded-[6px] border px-4 text-sm font-medium transition-colors duration-200 ${
+                  fulfillmentMethod === method
+                    ? "border-ink bg-ink text-ivory"
+                    : "border-ink/20 text-ink hover:border-ink/40"
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="fulfillmentMethod"
+                  value={method}
+                  checked={fulfillmentMethod === method}
+                  onChange={() => setFulfillmentMethod(method)}
+                  className="sr-only"
+                />
+                {method}
+              </label>
+            ))}
+          </div>
+          {state.errors?.fulfillmentMethod && (
+            <p className="mt-2 text-sm text-red-700">
+              {state.errors.fulfillmentMethod}
+            </p>
+          )}
+        </fieldset>
+
+        <Field
+          label={
+            fulfillmentMethod === "Delivery" ? "Delivery address" : "Pickup note"
+          }
+          error={state.errors?.fulfillmentDetails}
         >
-          Back to cart
-        </Link>
-      </div>
+          <textarea
+            name="fulfillmentDetails"
+            defaultValue={state.values?.fulfillmentDetails}
+            placeholder={
+              fulfillmentMethod === "Delivery"
+                ? "Street, barangay, city"
+                : "Pickup at the studio"
+            }
+            rows={2}
+            required
+            className={inputClass}
+          />
+        </Field>
+
+        <Field
+          label="Preferred date/time"
+          error={state.errors?.fulfillmentDateTime}
+        >
+          <input
+            type="text"
+            name="fulfillmentDateTime"
+            defaultValue={state.values?.fulfillmentDateTime}
+            placeholder="e.g. Aug 30, 2–5 PM"
+            required
+            className={inputClass}
+          />
+        </Field>
+
+        <Field label="Gift message (optional)">
+          <textarea
+            name="giftMessage"
+            defaultValue={state.values?.giftMessage}
+            rows={3}
+            maxLength={280}
+            className={inputClass}
+          />
+        </Field>
+
+        <div className="rounded-[6px] border border-ink/10 bg-ivory px-4 py-3 text-sm text-ink/70">
+          Payment:{" "}
+          <span className="font-medium text-ink">Pay on pickup/delivery</span>
+        </div>
+
+        {state.errors?.items && (
+          <p className="text-sm text-red-700">{state.errors.items}</p>
+        )}
+
+        <div className="flex flex-wrap gap-4">
+          <Link
+            href="/cart"
+            className="inline-flex h-12 items-center rounded-[6px] border border-ink/25 px-6 text-sm font-medium text-ink"
+          >
+            Back to cart
+          </Link>
+          <button
+            type="submit"
+            disabled={isPending}
+            className="inline-flex h-12 items-center rounded-[6px] bg-ink px-6 text-sm font-medium text-ivory transition-colors duration-200 hover:bg-ink/90 disabled:opacity-60"
+          >
+            {isPending ? "Placing order…" : "Place order"}
+          </button>
+        </div>
+      </form>
     </div>
   );
 }

@@ -20,9 +20,9 @@ export function BouquetDetail({ bouquet }: { bouquet: Bouquet }) {
     return bouquet.basePrice + (size?.priceDelta ?? 0);
   }, [bouquet.basePrice, size]);
 
-  function handleAddToCart() {
+  function buildCartItem() {
     const trimmedMessage = letterMessage.trim();
-    addItem({
+    return {
       name: bouquet.name,
       unitPrice,
       quantity,
@@ -30,9 +30,18 @@ export function BouquetDetail({ bouquet }: { bouquet: Bouquet }) {
         size ? size.label : null,
         trimmedMessage ? `Handwritten letter: "${trimmedMessage}"` : null,
       ].filter((v): v is string => Boolean(v)),
-    });
+    };
+  }
+
+  function handleAddToCart() {
+    addItem(buildCartItem());
     setJustAdded(true);
     setTimeout(() => setJustAdded(false), 2500);
+  }
+
+  function handleBuyNow() {
+    addItem(buildCartItem());
+    router.push("/checkout");
   }
 
   return (
@@ -138,6 +147,13 @@ export function BouquetDetail({ bouquet }: { bouquet: Bouquet }) {
           className="inline-flex h-12 items-center rounded-[6px] bg-ink px-6 text-sm font-medium text-ivory transition-colors duration-200 hover:bg-ink/90"
         >
           Add to cart
+        </button>
+        <button
+          type="button"
+          onClick={handleBuyNow}
+          className="inline-flex h-12 items-center rounded-[6px] border border-ink/25 px-6 text-sm font-medium text-ink transition-colors duration-200 hover:border-ink/40"
+        >
+          Buy now
         </button>
         {justAdded && (
           <button

@@ -1,14 +1,14 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { OrderStatusControl } from "@/components/admin/OrderStatusControl";
-import { getOrderById } from "@/lib/data/orders";
+import { getOrderById } from "@/lib/data/orders-store";
 import { formatPrice } from "@/lib/format";
 
 export default async function AdminOrderDetailPage(
   props: PageProps<"/admin/orders/[id]">,
 ) {
   const { id } = await props.params;
-  const order = getOrderById(id);
+  const order = await getOrderById(id);
 
   if (!order) notFound();
 
