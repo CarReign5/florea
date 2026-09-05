@@ -6,6 +6,7 @@ import {
   type CreateOrderInput,
 } from "@/lib/data/orders-store";
 import type { Order, OrderItem } from "@/lib/data/orders";
+import type { CartItem } from "@/lib/types";
 import {
   getLogoUrl,
   sendOrderConfirmationEmail,
@@ -102,9 +103,9 @@ export async function createOrderAction(
     giftMessage: String(formData.get("giftMessage") ?? ""),
   };
 
-  let items: OrderItem[];
+  let cartItems: CartItem[];
   try {
-    items = JSON.parse(String(formData.get("items") ?? "[]"));
+    cartItems = JSON.parse(String(formData.get("items") ?? "[]"));
   } catch {
     return {
       status: "error",
@@ -112,6 +113,13 @@ export async function createOrderAction(
       values,
     };
   }
+
+  const items: OrderItem[] = cartItems.map((item) => ({
+    name: item.name,
+    quantity: item.quantity,
+    unitPrice: item.unitPrice,
+    options: item.details,
+  }));
 
   const input: CreateOrderInput = { ...values, items };
   const result = await createOrder(input);
