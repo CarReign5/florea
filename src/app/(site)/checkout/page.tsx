@@ -40,6 +40,7 @@ export default function CheckoutPage() {
     createOrderAction,
     initialCheckoutActionState,
   );
+  const cartMessage = items.find((item) => item.message)?.message ?? "";
 
   if (items.length === 0) {
     return (
@@ -210,7 +211,7 @@ export default function CheckoutPage() {
         <Field label="Gift message (optional)">
           <textarea
             name="giftMessage"
-            defaultValue={state.values?.giftMessage}
+            defaultValue={state.values?.giftMessage ?? cartMessage}
             rows={3}
             maxLength={280}
             className={inputClass}

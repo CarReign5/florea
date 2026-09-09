@@ -2,108 +2,111 @@ import type { Bouquet } from "@/lib/types";
 
 /**
  * Sample catalog data for layout/development purposes.
- * Names, descriptions, and prices are placeholders — replace with
- * Floréa's real bouquets and confirmed pricing before launch.
+ * Names and descriptions (Solstice, Aurora, Alpenglow, Nova, and their
+ * meanings) are confirmed; prices are still placeholders — confirm
+ * before launch.
  */
 export const bouquets: Bouquet[] = [
   {
-    slug: "pink-tulip-bouquet",
+    slug: "aurora",
     collectionSlug: "the-celestial-collection",
-    name: "Pink Tulip Bouquet",
-    shortDescription: "Fuzzy-wire tulips with soft white filler blooms.",
+    name: "Aurora",
+    shortDescription: "The dawn light of hope and new beginnings.",
     description:
-      "Blush pink fuzzy-wire tulips paired with small white filler flowers, wrapped in kraft newspaper and ivory paper with a sheer white ribbon. Real product photo — name and price still placeholders, please confirm.",
-    basePrice: 780,
+      "Blush pink fuzzy-wire tulips paired with small white filler flowers, wrapped in kraft newspaper and ivory paper with a sheer white ribbon. Named for the dawn light of hope and new beginnings, Aurora is a gentle bouquet for fresh starts and quiet joys.",
+    basePrice: 399,
     badge: "Bestseller",
     image: "/bouquet1.png",
     imageAlt:
       "Handmade fuzzy-wire pink tulip bouquet with white filler flowers, wrapped in kraft newspaper and ivory paper with a sheer white ribbon, styled on a sunlit tabletop with a mirror",
     sizes: [
       { id: "petite", label: "Petite (5 stems)", priceDelta: 0 },
-      { id: "classic", label: "Classic (9 stems)", priceDelta: 320 },
-      { id: "grand", label: "Grand (14 stems)", priceDelta: 680 },
+      { id: "classic", label: "Classic (9 stems)", priceDelta: 120 },
+      { id: "grand", label: "Grand (14 stems)", priceDelta: 320 },
     ],
     addOns: [
       { id: "gift-note", label: "Handwritten-style gift note", price: 0 },
-      { id: "vase", label: "Ceramic keepsake vase", price: 250 },
-      { id: "ribbon-upgrade", label: "Silk ribbon upgrade", price: 90 },
+      { id: "ribbon-upgrade", label: "Silk ribbon upgrade", price: 20 },
     ],
   },
   {
-    slug: "dusty-rose-keepsake",
+    slug: "alpenglow",
     collectionSlug: "the-celestial-collection",
-    name: "Dusty Rose Keepsake",
-    shortDescription: "Fuzzy-wire roses in dusty rose and sage tones.",
+    name: "Alpenglow",
+    shortDescription: "The rosy light that kisses mountain peaks at dawn & dusk.",
     description:
-      "A romantic pairing of dusty rose and sage fuzzy-wire roses, finished with brown newspaper accent wrap. Placeholder name/description — photo is real, please confirm copy.",
-    basePrice: 890,
+      "Velvet red fuzzy-wire roses gathered with white daisy accents, wrapped in kraft newspaper and ivory paper with a sheer ribbon. Alpenglow takes its name from the rosy light that kisses mountain peaks at dawn and dusk — a warm, romantic bouquet for the ones you love.",
+    basePrice: 400,
     badge: "Limited",
     image: "/bouquet2.png",
     imageAlt:
       "Handmade fuzzy-wire bouquet with deep red velvet roses and white daisy accents, wrapped in kraft newspaper with a sheer ribbon, styled on a sunlit tabletop with a mirror",
     sizes: [
       { id: "classic", label: "Classic (9 stems)", priceDelta: 0 },
-      { id: "grand", label: "Grand (14 stems)", priceDelta: 420 },
+      { id: "grand", label: "Grand (14 stems)", priceDelta: 180 },
     ],
     addOns: [
       { id: "gift-note", label: "Handwritten-style gift note", price: 0 },
-      { id: "vase", label: "Ceramic keepsake vase", price: 250 },
+      { id: "ribbon-upgrade", label: "Silk ribbon upgrade", price: 20 },
     ],
   },
   {
-    slug: "crochet-daisy-bunch",
+    slug: "solstice",
     collectionSlug: "the-celestial-collection",
-    name: "Crochet Daisy Bunch",
-    shortDescription: "Soft crochet daisies in a cheerful, simple bunch.",
+    name: "Solstice",
+    shortDescription: "The season when the sun shines at its brightest.",
     description:
-      "Crochet-thread daisies in warm white and soft yellow, kept simple and bright. Placeholder name/description — photo is real, please confirm copy.",
-    basePrice: 620,
+      "Deep red fuzzy-wire lily blooms paired with delicate white daisy accents, wrapped in kraft newspaper and ivory paper with a sheer ribbon. Solstice marks the season when the sun shines at its brightest — a bold, radiant bouquet for a moment worth celebrating.",
+    basePrice: 299,
     badge: "New",
     image: "/bouquet3.png",
     imageAlt:
       "Handmade fuzzy-wire bouquet with deep red velvet lily blooms and white daisy accents, wrapped in kraft newspaper with a sheer ribbon, styled on a sunlit tabletop with a mirror",
     sizes: [
       { id: "petite", label: "Petite (5 stems)", priceDelta: 0 },
-      { id: "classic", label: "Classic (9 stems)", priceDelta: 260 },
+      { id: "classic", label: "Classic (9 stems)", priceDelta: 120 },
     ],
     addOns: [
       { id: "gift-note", label: "Handwritten-style gift note", price: 0 },
-      { id: "ribbon-upgrade", label: "Silk ribbon upgrade", price: 90 },
+      { id: "ribbon-upgrade", label: "Silk ribbon upgrade", price: 20 },
     ],
   },
   {
-    slug: "sunlit-sunflower-mix",
+    slug: "soleil",
     collectionSlug: "the-celestial-collection",
-    name: "Sunlit Sunflower Mix",
-    shortDescription: "Fuzzy-wire sunflowers paired with soft greenery.",
+    name: "Soleil",
+    shortDescription: "A little piece of sunshine, made to brighten someone’s day.",
     description:
-      "A bright, cheerful bundle of fuzzy-wire sunflowers with a velvet red rose center, paired with purple lavender stems and cream lily accents. Real product photo — name and price still placeholders, please confirm.",
-    basePrice: 740,
+      "A cheerful arrangement of golden yellow, soft ivory, and touches of lavender, handcrafted to celebrate the people who bring a little more light into your life. 🌻 Perfect for: birthdays, congratulations, appreciation, encouragement, or a simple 'I thought you could use some sunshine today.'",
+    basePrice: 250,
     image: "/bouquet4.png",
     imageAlt:
       "Handmade fuzzy-wire bouquet with a yellow sunflower and red rose center, purple lavender stems, and cream lily accents, wrapped in kraft newspaper with a sheer ribbon, styled on a sunlit tabletop with a mirror",
     sizes: [
       { id: "petite", label: "Petite (5 stems)", priceDelta: 0 },
-      { id: "classic", label: "Classic (9 stems)", priceDelta: 300 },
+      { id: "classic", label: "Classic (9 stems)", priceDelta: 120 },
     ],
     addOns: [
       { id: "gift-note", label: "Handwritten-style gift note", price: 0 },
-      { id: "ribbon-upgrade", label: "Silk ribbon upgrade", price: 90 },
+      { id: "ribbon-upgrade", label: "Silk ribbon upgrade", price: 20 },
     ],
   },
   {
-    slug: "little-everyday-bunch",
+    slug: "nova",
     collectionSlug: "the-celestial-collection",
-    name: "Little Everyday Bunch",
-    shortDescription: "A small, affordable bunch for no-occasion gifting.",
+    name: "Nova",
+    shortDescription: "A brilliant starburst before gently fading.",
     description:
-      "A compact single pink gerbera daisy paired with purple lavender and a pink tulip bud, sized for desks, small spaces, and everyday gestures. Real product photo — name and price still placeholders, please confirm.",
-    basePrice: 420,
+      "A single fuzzy-wire pink gerbera daisy paired with purple lavender stems and a tulip bud, wrapped in kraft newspaper with a sheer ribbon. Nova — a brilliant starburst before gently fading — is a compact, everyday bouquet for small gestures that still shine bright.",
+    basePrice: 99,
     image: "/bouquet5.png",
     imageAlt:
       "Handmade fuzzy-wire bouquet with a single pink gerbera daisy, purple lavender stems, and a pink tulip bud, wrapped in kraft newspaper with a sheer ribbon, styled on a sunlit tabletop with a mirror",
     sizes: [{ id: "petite", label: "Petite (5 stems)", priceDelta: 0 }],
-    addOns: [{ id: "gift-note", label: "Handwritten-style gift note", price: 0 }],
+    addOns: [
+      { id: "gift-note", label: "Handwritten-style gift note", price: 0 },
+      { id: "ribbon-upgrade", label: "Silk ribbon upgrade", price: 20 },
+    ],
   },
 ];
 

@@ -4,11 +4,7 @@ import { PlaceholderPhoto } from "@/components/PlaceholderPhoto";
 import { ProductCard } from "@/components/ProductCard";
 import { bouquets } from "@/lib/data/bouquets";
 
-const bestsellerSlugs = [
-  "pink-tulip-bouquet",
-  "dusty-rose-keepsake",
-  "crochet-daisy-bunch",
-];
+const bestsellerSlugs = ["aurora", "alpenglow", "solstice"];
 const bestsellers = bestsellerSlugs
   .map((slug) => bouquets.find((bouquet) => bouquet.slug === slug))
   .filter((bouquet): bouquet is (typeof bouquets)[number] => Boolean(bouquet));

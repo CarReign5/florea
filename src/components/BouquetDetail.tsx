@@ -30,6 +30,7 @@ export function BouquetDetail({ bouquet }: { bouquet: Bouquet }) {
         size ? size.label : null,
         trimmedMessage ? `Handwritten letter: "${trimmedMessage}"` : null,
       ].filter((v): v is string => Boolean(v)),
+      message: trimmedMessage || undefined,
     };
   }
 

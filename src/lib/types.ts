@@ -54,4 +54,5 @@ export type CartItem = {
   unitPrice: number;
   quantity: number;
   details: string[];
+  message?: string;
 };
