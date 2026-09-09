@@ -44,6 +44,18 @@ export type OrderNotificationEmailData = {
   logoUrl: string;
 };
 
+export type OrderSaveFailureEmailData = {
+  occurredAt: string;
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
+  fulfillmentMethod: string;
+  itemCount: number;
+  orderTotal: string;
+  errorCode: string;
+  errorMessage: string;
+};
+
 function escapeHtml(value: string): string {
   return value
     .replace(/&/g, "&amp;")
@@ -171,6 +183,84 @@ export function renderOrderConfirmationEmail(data: OrderConfirmationEmailData): 
               <td align="center" style="padding:24px 32px; background-color:#292522;">
                 <p style="margin:0 0 4px; font-family:Georgia,'Times New Roman',serif; font-size:15px; color:#D8C4A8;">Made by hand, given with meaning.</p>
                 <p style="margin:0; font-size:12px; color:rgba(250,247,242,0.5);">Floréa &middot; General Santos City, Philippines</p>
+              </td>
+            </tr>
+
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>`;
+
+  return { subject, html };
+}
+
+export function renderOrderSaveFailureEmail(data: OrderSaveFailureEmailData): {
+  subject: string;
+  html: string;
+} {
+  const subject = `⚠️ A Floréa order failed to save`;
+
+  const html = `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>${escapeHtml(subject)}</title>
+  </head>
+  <body style="margin:0; padding:0; background-color:#FAF7F2; font-family:Arial, Helvetica, sans-serif;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#FAF7F2;">
+      <tr>
+        <td align="center" style="padding:40px 16px;">
+          <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px; width:100%; background-color:#FFFFFF; border:1px solid rgba(41,37,34,0.1); border-radius:10px; overflow:hidden;">
+
+            <tr>
+              <td style="padding:24px 32px; background-color:#7A2E2E;">
+                <p style="margin:0; font-family:Georgia,'Times New Roman',serif; font-size:20px; color:#FFFFFF;">A checkout order failed to save</p>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="padding:24px 32px 0;">
+                <p style="margin:0; font-size:14px; line-height:1.6; color:rgba(41,37,34,0.75);">
+                  A customer submitted the checkout form at ${escapeHtml(data.occurredAt)}, but the order could not be saved. They saw a generic "something went wrong" message. Check the Vercel function logs for the full error and consider reaching out to the customer directly.
+                </p>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="padding:20px 32px 0;">
+                <p style="margin:0 0 12px; font-size:11px; letter-spacing:1.5px; color:#9B846E; text-transform:uppercase;">Customer</p>
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size:14px; color:#292522;">
+                  <tr><td style="padding:2px 0; color:rgba(41,37,34,0.5); width:120px;">Name</td><td style="padding:2px 0;">${escapeHtml(data.customerName)}</td></tr>
+                  <tr><td style="padding:2px 0; color:rgba(41,37,34,0.5);">Phone</td><td style="padding:2px 0;">${escapeHtml(data.customerPhone)}</td></tr>
+                  <tr><td style="padding:2px 0; color:rgba(41,37,34,0.5);">Email</td><td style="padding:2px 0;">${escapeHtml(data.customerEmail)}</td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="padding:20px 32px 0;">
+                <p style="margin:0 0 12px; font-size:11px; letter-spacing:1.5px; color:#9B846E; text-transform:uppercase;">Attempted order</p>
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size:14px; color:#292522;">
+                  <tr><td style="padding:2px 0; color:rgba(41,37,34,0.5); width:120px;">Fulfillment</td><td style="padding:2px 0;">${escapeHtml(data.fulfillmentMethod)}</td></tr>
+                  <tr><td style="padding:2px 0; color:rgba(41,37,34,0.5);">Items</td><td style="padding:2px 0;">${data.itemCount}</td></tr>
+                  <tr><td style="padding:2px 0; color:rgba(41,37,34,0.5);">Total</td><td style="padding:2px 0;">${escapeHtml(data.orderTotal)}</td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr>
+              <td style="padding:20px 32px 28px;">
+                <p style="margin:0 0 8px; font-size:11px; letter-spacing:1.5px; color:#9B846E; text-transform:uppercase;">Error</p>
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#E9DED0; border-radius:6px;">
+                  <tr>
+                    <td style="padding:14px 16px; font-family:'Courier New',monospace; font-size:13px; color:#292522;">
+                      ${escapeHtml(data.errorCode)}: ${escapeHtml(data.errorMessage)}
+                    </td>
+                  </tr>
+                </table>
               </td>
             </tr>
 

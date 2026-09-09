@@ -3,8 +3,10 @@ import { Resend } from "resend";
 import {
   renderOrderConfirmationEmail,
   renderOrderNotificationEmail,
+  renderOrderSaveFailureEmail,
   type OrderConfirmationEmailData,
   type OrderNotificationEmailData,
+  type OrderSaveFailureEmailData,
 } from "@/lib/email-templates";
 
 type SendResult =
@@ -78,6 +80,36 @@ export async function sendOrderNotificationEmail(
 
   if (error) {
     console.error("[email] Failed to send order notification:", error);
+    return { sent: false, reason: error.message };
+  }
+
+  return { sent: true };
+}
+
+export async function sendOrderSaveFailureAlert(
+  data: OrderSaveFailureEmailData,
+): Promise<SendResult> {
+  const client = getClient();
+  const from = getFromAddress();
+  const ownerEmail = process.env.OWNER_NOTIFICATION_EMAIL;
+
+  if (!client || !from || !ownerEmail) {
+    console.warn(
+      "[email] Skipping order-save-failure alert — RESEND_API_KEY, RESEND_FROM_EMAIL, or OWNER_NOTIFICATION_EMAIL not configured.",
+    );
+    return { sent: false, reason: "not_configured" };
+  }
+
+  const { subject, html } = renderOrderSaveFailureEmail(data);
+  const { error } = await client.emails.send({
+    from,
+    to: ownerEmail,
+    subject,
+    html,
+  });
+
+  if (error) {
+    console.error("[email] Failed to send order-save-failure alert:", error);
     return { sent: false, reason: error.message };
   }
 

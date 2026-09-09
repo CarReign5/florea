@@ -1,6 +1,8 @@
 import "server-only";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type { Order, OrderItem } from "@/lib/data/orders";
+import { sendOrderSaveFailureAlert } from "@/lib/email";
+import { formatOrderDate, formatPrice } from "@/lib/format";
 
 let client: SupabaseClient | null = null;
 
@@ -168,6 +170,32 @@ export type CreateOrderResult =
   | { ok: true; order: Order }
   | { ok: false; errors: Record<string, string> };
 
+async function alertOwnerOfSaveFailure(
+  order: CreateOrderInput,
+  total: number,
+  errorCode: string,
+  errorMessage: string,
+): Promise<void> {
+  try {
+    const result = await sendOrderSaveFailureAlert({
+      occurredAt: formatOrderDate(new Date().toISOString()),
+      customerName: order.customerName,
+      customerEmail: order.customerEmail,
+      customerPhone: order.customerPhone,
+      fulfillmentMethod: order.fulfillmentMethod,
+      itemCount: order.items.length,
+      orderTotal: formatPrice(total),
+      errorCode,
+      errorMessage,
+    });
+    if (!result.sent) {
+      console.warn("[orders-store] Order-save-failure alert skipped:", result.reason);
+    }
+  } catch (err) {
+    console.error("[orders-store] Failed to send order-save-failure alert:", err);
+  }
+}
+
 export async function createOrder(
   input: CreateOrderInput,
 ): Promise<CreateOrderResult> {
@@ -182,31 +210,51 @@ export async function createOrder(
     0,
   );
 
-  const { data, error } = await getClient()
-    .from("orders")
-    .insert({
-      customer_name: order.customerName,
-      customer_phone: order.customerPhone,
-      customer_email: order.customerEmail,
-      fulfillment_method: order.fulfillmentMethod,
-      fulfillment_details: order.fulfillmentDetails,
-      fulfillment_date_time: order.fulfillmentDateTime,
-      payment_method: "Pay on pickup/delivery",
-      status: "pending",
-      gift_message: order.giftMessage,
-      items: order.items,
-      total,
-    })
-    .select()
-    .single();
+  const genericError: CreateOrderResult = {
+    ok: false,
+    errors: { form: "Something went wrong saving your order. Please try again." },
+  };
 
-  if (error) {
-    console.error("[orders-store] Failed to create order:", error);
-    return {
-      ok: false,
-      errors: { form: "Something went wrong saving your order. Please try again." },
-    };
+  try {
+    const { data, error, status, statusText } = await getClient()
+      .from("orders")
+      .insert({
+        customer_name: order.customerName,
+        customer_phone: order.customerPhone,
+        customer_email: order.customerEmail,
+        fulfillment_method: order.fulfillmentMethod,
+        fulfillment_details: order.fulfillmentDetails,
+        fulfillment_date_time: order.fulfillmentDateTime,
+        payment_method: "Pay on pickup/delivery",
+        status: "pending",
+        gift_message: order.giftMessage,
+        items: order.items,
+        total,
+      })
+      .select()
+      .single();
+
+    if (error) {
+      console.error("[orders-store] Failed to create order:", {
+        status,
+        statusText,
+        code: error.code,
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+        fulfillmentMethod: order.fulfillmentMethod,
+        itemCount: order.items.length,
+        total,
+      });
+      await alertOwnerOfSaveFailure(order, total, error.code || "unknown", error.message);
+      return genericError;
+    }
+
+    return { ok: true, order: mapRowToOrder(data as OrderRow) };
+  } catch (err) {
+    console.error("[orders-store] Unexpected exception creating order:", err);
+    const message = err instanceof Error ? err.message : String(err);
+    await alertOwnerOfSaveFailure(order, total, "exception", message);
+    return genericError;
   }
-
-  return { ok: true, order: mapRowToOrder(data as OrderRow) };
 }
