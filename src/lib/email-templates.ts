@@ -182,7 +182,17 @@ export function renderOrderConfirmationEmail(data: OrderConfirmationEmailData): 
             <tr>
               <td align="center" style="padding:24px 32px; background-color:#292522;">
                 <p style="margin:0 0 4px; font-family:Georgia,'Times New Roman',serif; font-size:15px; color:#D8C4A8;">Made by hand, given with meaning.</p>
-                <p style="margin:0; font-size:12px; color:rgba(250,247,242,0.5);">Floréa &middot; General Santos City, Philippines</p>
+                <p style="margin:0 0 10px; font-size:12px; color:rgba(250,247,242,0.5);">Floréa &middot; General Santos City, Philippines</p>
+                <p style="margin:0 0 8px; font-size:12px; color:rgba(250,247,242,0.5);">
+                  <a href="tel:+639169588445" style="color:rgba(250,247,242,0.7); text-decoration:none;">0916 958 8445</a>
+                  &nbsp;&middot;&nbsp;
+                  <a href="mailto:floreaflowersandgifts@gmail.com" style="color:rgba(250,247,242,0.7); text-decoration:none;">floreaflowersandgifts@gmail.com</a>
+                </p>
+                <p style="margin:0; font-size:12px;">
+                  <a href="https://www.facebook.com/official.florea" style="color:rgba(250,247,242,0.7); text-decoration:none;">Facebook</a>
+                  &nbsp;&middot;&nbsp;
+                  <a href="https://www.instagram.com/floreaofficial.gensan/" style="color:rgba(250,247,242,0.7); text-decoration:none;">Instagram</a>
+                </p>
               </td>
             </tr>
 

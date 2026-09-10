@@ -186,13 +186,49 @@ export default function CheckoutPage() {
             placeholder={
               fulfillmentMethod === "Delivery"
                 ? "Street, barangay, city"
-                : "Pickup at the studio"
+                : "e.g. I may be a little late, but I'll be there tomorrow"
             }
             rows={2}
             required
             className={inputClass}
           />
         </Field>
+
+        {fulfillmentMethod === "Pickup" && (
+          <div className="overflow-hidden rounded-[6px] border border-ink/10 bg-soft-beige/40">
+            <div className="px-4 py-3 text-sm text-ink/70">
+              <p>
+                Pickup location:{" "}
+                <span className="font-medium text-ink">
+                  AppleCareTech Repair Shop
+                </span>
+              </p>
+              <p className="mt-2">
+                Just give your name and order details to the staff at the
+                shop, settle payment (If any) and they&rsquo;ll gladly hand over your order.
+              </p>
+            </div>
+            <iframe
+              title="AppleCareTech Repair Shop pickup location"
+              src="https://www.google.com/maps?q=APPLE+CARE+TECH+CELLPHONE+REPAIR,+General+Santos+City,+Philippines&output=embed"
+              width="100%"
+              height="250"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="block border-0"
+            />
+            <div className="px-4 py-2 text-sm">
+              <a
+                href="https://share.google/jF6Fme9bHXImn5Scp"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-ink underline underline-offset-2 hover:text-ink/70"
+              >
+                Open in Google Maps
+              </a>
+            </div>
+          </div>
+        )}
 
         <Field
           label="Preferred date/time"
