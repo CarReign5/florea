@@ -174,26 +174,6 @@ export default function CheckoutPage() {
           )}
         </fieldset>
 
-        <Field
-          label={
-            fulfillmentMethod === "Delivery" ? "Delivery address" : "Pickup note"
-          }
-          error={state.errors?.fulfillmentDetails}
-        >
-          <textarea
-            name="fulfillmentDetails"
-            defaultValue={state.values?.fulfillmentDetails}
-            placeholder={
-              fulfillmentMethod === "Delivery"
-                ? "Street, barangay, city"
-                : "e.g. I may be a little late, but I'll be there tomorrow"
-            }
-            rows={2}
-            required
-            className={inputClass}
-          />
-        </Field>
-
         {fulfillmentMethod === "Pickup" && (
           <div className="overflow-hidden rounded-[6px] border border-ink/10 bg-soft-beige/40">
             <div className="px-4 py-3 text-sm text-ink/70">
@@ -229,6 +209,26 @@ export default function CheckoutPage() {
             </div>
           </div>
         )}
+
+        <Field
+          label={
+            fulfillmentMethod === "Delivery" ? "Delivery address" : "Pickup note"
+          }
+          error={state.errors?.fulfillmentDetails}
+        >
+          <textarea
+            name="fulfillmentDetails"
+            defaultValue={state.values?.fulfillmentDetails}
+            placeholder={
+              fulfillmentMethod === "Delivery"
+                ? "Street, barangay, city"
+                : "e.g. I may be a little late, but I'll be there tomorrow"
+            }
+            rows={2}
+            required
+            className={inputClass}
+          />
+        </Field>
 
         <Field
           label="Preferred date/time"
