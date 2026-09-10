@@ -18,10 +18,37 @@ const roboto = Roboto({
   weight: ["400", "500", "700"],
 });
 
+const title = "Floréa | Handmade Flowers & Gifts";
+const description =
+  "Thoughtful, handcrafted fuzzy-wire and crochet flower bouquets — made by hand in General Santos City, given with meaning.";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
 export const metadata: Metadata = {
-  title: "Floréa | Handmade Flowers & Gifts",
-  description:
-    "Thoughtful, handcrafted fuzzy-wire and crochet flower bouquets — made by hand in General Santos City, given with meaning.",
+  metadataBase: new URL(siteUrl),
+  title,
+  description,
+  openGraph: {
+    title,
+    description,
+    url: "/",
+    siteName: "Floréa",
+    images: [
+      {
+        url: "/florea-logo-square.jpg",
+        width: 2048,
+        height: 2024,
+        alt: "Floréa — Handmade Flowers & Gifts",
+      },
+    ],
+    locale: "en_PH",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+    images: ["/florea-logo-square.jpg"],
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
