@@ -102,7 +102,7 @@ export function renderOrderConfirmationEmail(data: OrderConfirmationEmailData): 
           <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px; width:100%; background-color:#FFFFFF; border:1px solid rgba(41,37,34,0.1); border-radius:10px; overflow:hidden;">
 
             <tr>
-              <td align="center" style="padding:32px 32px 16px; background-color:#FAF7F2;">
+              <td align="center" style="padding:32px 32px 16px; background-color:#FCF5EF;">
                 <img src="${escapeHtml(data.logoUrl)}" width="220" alt="Floréa" style="display:block; width:220px; height:auto; margin:0 auto; border:0; font-family:Georgia,'Times New Roman',serif; font-size:16px; color:#9B846E;" />
               </td>
             </tr>
@@ -300,7 +300,7 @@ export function renderOrderNotificationEmail(data: OrderNotificationEmailData): 
                     <td>
                       <table role="presentation" cellpadding="0" cellspacing="0">
                         <tr>
-                          <td style="background-color:#FAF7F2; border-radius:6px; padding:8px 16px;">
+                          <td style="background-color:#FCF5EF; border-radius:6px; padding:8px 16px;">
                             <img src="${escapeHtml(data.logoUrl)}" width="140" alt="Floréa" style="display:block; width:140px; height:auto; border:0; font-family:Georgia,'Times New Roman',serif; font-size:13px; color:#9B846E;" />
                           </td>
                         </tr>
