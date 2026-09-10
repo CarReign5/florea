@@ -18,7 +18,7 @@ const roboto = Roboto({
   weight: ["400", "500", "700"],
 });
 
-const title = "Floréa | Handmade Flowers & Gifts";
+const title = "Floréa | Handmade Flowers & Gifts Gensan";
 const description =
   "Thoughtful, handcrafted fuzzy-wire and crochet flower bouquets — made by hand in General Santos City, given with meaning.";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
