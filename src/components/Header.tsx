@@ -1,6 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
 import { CartIndicator } from "./CartIndicator";
-import { Logo } from "./Logo";
 import { MobileNav } from "./MobileNav";
 
 const navLinks = [
@@ -14,7 +14,7 @@ export function Header() {
     <header className="sticky top-0 z-40 border-b border-ink/10 bg-ivory/95 backdrop-blur-sm">
       <div className="relative mx-auto flex h-20 max-w-[1280px] items-center justify-between px-6 md:px-10">
         <Link href="/" aria-label="Floréa home">
-          <Logo variant="compact" />
+          <Image src="/logo.png" alt="Floréa" width={160} height={47} priority className="h-10 w-auto" />
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
